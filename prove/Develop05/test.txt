@@ -1,0 +1,4 @@
+1|0
+SimpleGoal|Rome;Visit Rome,False
+EternalGoal|Journal;Write in my journal daily.,1/1/0001 12:00:00 AM
+NumberedGoal|Cold Calls;Call 10 people this week.,0/10
