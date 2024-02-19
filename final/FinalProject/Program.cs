@@ -8,7 +8,7 @@ class Program
 
         // Welcome the user
         Console.Clear();
-        Console.WriteLine("Welcome to the #1 competitor of Ramsey Solution!");
+        Console.WriteLine("Welcome to the #1 competitor of Ramsey Solutions!");
         // Wait for the user to continue
         Console.WriteLine();
         Console.WriteLine("Press <Enter> to Begin");

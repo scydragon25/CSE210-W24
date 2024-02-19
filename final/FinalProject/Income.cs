@@ -16,7 +16,7 @@ public class Income : Transaction
     public override string GetStringRepresentation()        // Return a string representation for
     {   // storing objects on a text file
         // String Format:
-        // ClassType|Date:Value;Descrition@Category
-        return $"Income|{GetDate()};{GetDescription()}:{base.GetValue()}={GetCategory()}";
+        // ClassType|Date;Descrition:Value=Category?didHappen
+        return $"Income|{GetDate()};{GetDescription()}:{base.GetValue()}={GetCategory()}?{GetStatus()}";
     }
 }

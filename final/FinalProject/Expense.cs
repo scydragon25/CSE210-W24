@@ -16,8 +16,8 @@ public class Expense : Transaction
     public override string GetStringRepresentation()        // Return a string representation for
     {   // storing objects on a text file
         // String Format:
-        // ClassType|Date:Value;Descrition@Category
-        return $"Expense|{GetDate()};{GetDescription()}:{base.GetValue()}={GetCategory()}";
+        // ClassType|Date;Descrition:Value=Category?didHappen
+        return $"Expense|{GetDate()};{GetDescription()}:{base.GetValue()}={GetCategory()}?{GetStatus()}";
     }
 
     public override double GetValue()       // Return the value of the transaction

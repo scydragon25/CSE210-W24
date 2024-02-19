@@ -17,15 +17,31 @@ public class SavingGoal : Goal
     public override void Planned(double total, int load)      // set that the goal is planned for
     {
         // Load Case
+        if (load==1)
+        {
+            base.Planned(total, 1);
+        }
+
         // Logic
-        base.Planned(total, 0);
+        if (total >= GetValue())
+        {
+            base.Planned(total, 0);
+        }
     }
 
     public override void Happened(double total, int load)      // set that the goal has happened
     {
         // Load Case
+        if (load==1)
+        {
+            base.Happened(total, 1);
+        }
+
         // Logic
-        base.Happened(total, 0);
+        if (total >= GetValue())
+        {
+            base.Happened(total, 0);
+        }
     }
 
     public override string GetStringRepresentation()        // Return a string representation for

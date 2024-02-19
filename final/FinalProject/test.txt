@@ -1,0 +1,10 @@
+Budget
+SavingGoal|Build Emergency ...;Have $1000 left over to add...:1000=False?False
+SpendingGoal|Limit Fast Food;Only spend $2000 this month:2000=True?True
+EarningGoal|Get Rich;Make over $5000 this month:5000=False?False
+Income|03/05/24;Temple View, Theresa:1600=Paycheck?False
+Income|03/06/24;Blood Money, Joseph:30=Plasma?False
+Income|03/06/24;Blood Money, Joseph:100=Plasma?False
+Expense|03/01/24;March Rent:800=Bills?True
+Expense|03/02/24;Groceries:100=Food?False
+Expense|03/03/24;Fast Offering:50=Religion?True

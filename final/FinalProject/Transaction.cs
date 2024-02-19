@@ -29,15 +29,52 @@ public abstract class Transaction
     }
 
     // Methods
-    public void Display()       // Display the transaction
+    public void Display(int index)       // Display the transaction
     {
+        // Truncate Description if longer than 32
+        if (_description.Length > 32)
+        {
+            _description = _description.Substring(0, 29)+"...";
+        }
+        // Truncate Category if longer than 8
+        if (_category.Length > 8)
+        {
+            _category = _category.Substring(0, 5)+"...";
+        }
+
         // Desired Format:
         // Date |   $Value  |   Description |   Category
+        Console.Write("{0,-12}{1,10}{2,-35}{3,-12}{4,-2}",
+                            $" {index}| {_date} |",
+                            $"{_value:n2} ",
+                            $"| {_description}",
+                            $"| <{_category}>",
+                            "||");
     }
 
     public void SetStatus()     // Set the status of the transaction that it has happened.
     {
         _didHappen = true;
+    }
+
+    public void SetDate(string date)        // Set the date of the transaction
+    {
+        _date = date;
+    }
+
+    public void SetValue(double value)      // Set the absolute cash value of the transaction
+    {
+        _value = value;
+    }
+
+    public void SetDescription(string description)      // Set the transaction description
+    {
+        _description = description;
+    }
+
+    public void SetCategory(string category)        // Set the transaction category
+    {
+        _category = category;
     }
 
     public bool GetStatus()     // Return the status of the transaction. Has is happened?
@@ -68,6 +105,5 @@ public abstract class Transaction
     public abstract string GetStringRepresentation();     // Return a string representation for
         // storing objects on a text file
         // String Format:
-        // ClassType|Date;Descrition:Value=Category
-    
+        // ClassType|Date;Descrition:Value=Category?didHappen
 }

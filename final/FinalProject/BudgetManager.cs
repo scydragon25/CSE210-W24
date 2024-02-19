@@ -47,44 +47,124 @@ public class BudgetManager
             Console.WriteLine(" 11. Load Your Budget");
             Console.WriteLine(" 12. Exit Program");
             Console.WriteLine();
-            Console.Write("Action Number Here -> ");
+            Console.Write("Numbered Selection Here -> ");
             // User choice
             input = int.Parse(Console.ReadLine());
             // Interpret User Choice
             switch (input)
             {
                 case 1: // Display Budget
-                    
+                    Console.Clear();
+                    _budget.DisplayBudget();
+
+                    // Wait for the user to continue
+                    Console.WriteLine();
+                    Console.WriteLine("Press <Enter> to Begin");
+                    Console.ReadLine();
                     break;
                 case 2: // Display Summary
-                    
+                    Console.Clear();
+
+                    // Budget Summary
+                    Console.WriteLine($" ||\t{_budget.GetName()}");
+                    _budget.DisplaySummary();
+                    Console.WriteLine();
+
+                    // Goal Summary
+                    // Check Status of Goals
+                    foreach (Goal goal in _goals)
+                    {
+                        if (goal is EarningGoal)
+                        {
+                            goal.Planned(_budget.GetPlannedIncomeTotal(),0);
+                            goal.Happened(_budget.GetActualIncomeTotal(),0);
+                        }
+                        else if (goal is SavingGoal)
+                        {
+                            goal.Planned(_budget.GetPlannedNetBalance(),0);
+                            goal.Happened(_budget.GetActualNetBalance(),0);
+                        }
+                        else if (goal is SpendingGoal)
+                        {
+                            goal.Planned(_budget.GetPlannedExpenseTotal(),0);
+                            goal.Happened(_budget.GetActualExpenseTotal(),0);
+                        }
+                    }
+                    ListGoalSummary();
+
+                    // Wait for the user to continue
+                    Console.WriteLine();
+                    Console.WriteLine("Press <Enter> to Begin");
+                    Console.ReadLine();
                     break;
                 case 3: // Change Budget Name
-                    
+                    Console.Clear();
+                    Console.WriteLine("What would you like the budget name to be?");
+                    Console.Write("New Budget Name Here -> ");
+                    _budget.SetName(Console.ReadLine());
                     break;
                 case 4: // Create New Budget
+                    // Local Variable
+                    string selection = "";
+
+                    // Warn the user
+                    Console.Clear();
+                    Console.WriteLine("You have chosen to create a new budget.");
+                    Console.WriteLine("Warning: This will delete the exisiting budget.");
+                    Console.WriteLine(" Do you wish to continue or go back?");
+                    Console.WriteLine("  1. Continue");
+                    Console.WriteLine("  2. Go Back");
+                    Console.Write("Numbered Selection Here -> ");
                     
-                    break;
+                    // User choice
+                    selection = Console.ReadLine();
+                    
+                    // Create Budget
+                    if (int.Parse(selection)==1)   // Continue
+                    {
+                        _budget = new Budget("Budget");
+                        break;
+                    }
+                    else    // Go Back
+                    {    
+                        break;
+                    }
                 case 5: // Add a Transaction
-                    
+                    Console.Clear();
+                    _budget.AddTransaction();
                     break;
                 case 6: // Edit a Transaction
-                    
+                    Console.Clear();
+                    _budget.EditTransaction();
                     break;
                 case 7: // Remove a Transaction
-                    
+                    Console.Clear();
+                    _budget.RemoveTransaction();
                     break;
                 case 8: // Create Goal
-                    
+                    Console.Clear();
+                    CreateGoal();
                     break;
                 case 9: // Remove Goal
-                    
+                    Console.Clear();
+                    // Show the user the goals
+                    ListGoalSummary();
+                    Console.WriteLine();
+                    Console.WriteLine("Which goal do you wish to remove? Type <#0> to delete none of them.");
+                    Console.WriteLine("Numbered Selection Here -> ");
+                    if (Console.ReadLine()=="0")
+                    {
+                        break;
+                    }
+                    _goals.RemoveAt(int.Parse(Console.ReadLine()));
                     break;
                 case 10: // Save Budget
-                    
+                    Console.Clear();
+                    Save();
                     break;
                 case 11: // Load Budget
-
+                    Console.Clear();
+                    Load();
                     break;
                 case 12: // Exit
 
@@ -109,9 +189,9 @@ public class BudgetManager
         //Display Goal Types
         Console.Clear();
         Console.WriteLine("What type of goal do you want to set?");
-        Console.WriteLine(" 1. Saving - i.e. I want to add $300 to my savings account");
-        Console.WriteLine(" 2. Spending - i.e. I do not want to spend more than $100 eating out");
-        Console.WriteLine(" 3. Earning - i.e I want to make $2000 this month");
+        Console.WriteLine(" 1. Saving - i.e. I want to have saved $300 by the end of the month");
+        Console.WriteLine(" 2. Spending - i.e. I do not want to spend more than $2000 this month");
+        Console.WriteLine(" 3. Earning - i.e I want to make $3000 this month");
         Console.WriteLine();
         Console.Write("Type the number next to the goal type -> ");
         // User choice
@@ -146,19 +226,28 @@ public class BudgetManager
 
     private void ListGoalSummary()      // Call each goal's display method to display a list of all goal.
     {
-        Console.Clear();
+        // Local Variable
+        int index =0;
+
+        // Desired Format:
+        //  [X]     [X]     Name:   Description
+        Console.WriteLine("{0,12}{1,11}{2,22}{3,-34}",
+                            "|| Planned |",
+                            "|  Actual |",
+                            "|        Name        |",
+                            "|          Description          ||");
+        Console.WriteLine("===================="+
+                            "===================="+
+                            "===================="+
+                            "===================");
         foreach (Goal goal in _goals)
         {
-            goal.Display();
+            goal.Display(index);
+            index++;
         }
-
-        // Wait for the user to continue
-        Console.WriteLine();
-        Console.WriteLine("Press <Enter> to return");
-        Console.ReadLine();
     }
 
-    private void SaveGoals()     // Save to a file name, mirrored after the user's name
+    private void Save()     // Save to a file name, mirrored after the user's name
     {
         // Local Variables
         string fileName;
@@ -203,7 +292,7 @@ public class BudgetManager
         }
     }
 
-    private void LoadGoals(List<Goal> prevList)
+    private void Load()
     {
         // Local Variables
         List<Goal> newGoals = new List<Goal>();
@@ -214,6 +303,7 @@ public class BudgetManager
         double value;
         string date;
         string category = "N/A";    // default
+        bool status = false;    // default
         bool didHappen = false; // default
         bool isPlanned = false; // default
         
@@ -262,7 +352,9 @@ public class BudgetManager
             }
             else    // else the line is a transaction object
             {
-                category = parse4[1];   // text after = is the transaction category
+                string[] parse5 = parse4[1].Split('?');
+                category = parse5[0];   // text before ? is the transaction category
+                status = bool.Parse(parse5[1]); // text after ? is the transaction status
             }
 
             // Create a goal from the line
@@ -310,12 +402,22 @@ public class BudgetManager
             if (type=="Expense") // if an Expense
             {
                 Expense expense = new Expense(date, value, description, category);
-                _budget.AddTransaction(expense);
+                if (status) // if status is true
+                {
+                    // then the transaction happen
+                    expense.SetStatus();
+                }
+                _budget.AddExpense(expense);
             }
             else if (type=="Income")    // if an Income
             {
                 Income income = new Income(date, value, description, category);
-                _budget.AddTransaction(income);
+                if (status) // if status is true
+                {
+                    // then the transaction happen
+                    income.SetStatus();
+                }
+                _budget.AddIncome(income);
             }
         }
 

@@ -29,10 +29,39 @@ public abstract class Goal
     }
 
     // Methods
-    public void Display()       // Display the goal
+    public void Display(int index)       // Display the goal
     {
+        // Check Goal Status
+        char a = ' ';   // Default that the goal is not planned for
+        char b = ' ';   // Default that the goal is not yet acheived
+        if (IsItPlanned())
+        {
+            a = 'X';
+        }
+        if (DidItHappen())
+        {
+            b = 'X';
+        }
+
+        // Truncate Name if longer than 19
+        if (_name.Length > 19)
+        {
+            _name = _name.Substring(0, 16)+"...";
+        }
+        // Truncate Description if longer than 34
+        if (_description.Length > 30)
+        {
+            _description = _description.Substring(0, 27)+"...";
+        }
+
         // Desired Format:
         //  [X]     [X]     Name:   Description
+        Console.WriteLine("{0,12}{1,12}{2,21}{3,-32}{4,2}",
+                            $"{index+1}|   [{a}]   |",
+                            $"|   [{b}]   ||",
+                            $"{_name} |",
+                            $"| {_description}",
+                            "||");
     }
 
     public string GetName()     // Return the name of the goal
